@@ -67,7 +67,9 @@ def encode_image(img_path, out_path):
 
 
 # Convert compressed data back to image
-def decode_image(compressed_path, out_path, sussyness: float = 0.0):
+def decode_image(
+    compressed_path, out_path, format: str = "png", sussyness: float = 0.0
+):
     with open(compressed_path, "rb") as f:
         compressed = decompress(f.read())
 
@@ -131,32 +133,76 @@ def decode_image(compressed_path, out_path, sussyness: float = 0.0):
     )
 
     # Save the result
-    reconstructed_image.save(out_path)
+    reconstructed_image.save(out_path, format=format)
 
 
 if __name__ == "__main__":
-    import argparse, sys
+    import argparse, sys, glob
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--encode", help="Path to image to encode")
-    parser.add_argument("-d", "--decode", help="Path to compressed data to decode")
-    parser.add_argument("-o", "--output", help="Path to output file")
+    parser.add_argument("path", nargs="+", help="Path of a file or a folder of files.")
     parser.add_argument(
-        "-s", "--sus", help="Sussiness of the image", type=float, default=0.1
+        "-e", "--encode", help="Only encode images", action="store_true"
+    )
+    parser.add_argument(
+        "-d",
+        "--decode",
+        help="Decode amogus format instead of encoding images",
+        action="store_true",
+    )
+    parser.add_argument("-o", "--output", help="Path to output folder")
+    parser.add_argument(
+        "-s",
+        "--sus",
+        help="Sussiness of the image",
+        type=float,
+        default=0.1,
+    )
+    parser.add_argument(
+        "-r",
+        "--recursive",
+        action="store_true",
+        help="Search through subfolders",
+    )
+    parser.add_argument(
+        "-f",
+        "--format",
+        help="Format of the resulting image",
+        type=str,
+        default="png",
     )
 
     args = parser.parse_args()
 
-    if not args.output or "." not in str(args.output):
-        args.output = set_extension(args.output or args.encode or args.decode, "amog")
+    # Parse and recurse paths and files
+    files = set()
+    full_paths = [os.path.join(os.getcwd(), path) for path in args.path]
+    for path in full_paths:
+        if args.recursive and os.path.isdir(path):
+            full_paths += glob.glob(path + "/*")
+        elif os.path.isfile(path):
+            files.add(path)
 
-    if args.encode:
-        print("Encoding image...")
-        encode_image(args.encode, args.output)
-        decode_image(args.output, args.output + ".png", sussyness=args.sus)
-    elif args.decode:
-        print("Decoding amogimage...")
-        decode_image(args.decode, args.output, sussyness=args.sus)
-    else:
-        print("Please specify a file to either --encode or --decode")
-        sys.exit(1)
+    output_path = os.path.abspath(args.output) if len(files) > 1 else os.getcwd()
+
+    # Encode or decode as necessary
+    for i, path in enumerate(files):
+        output_name = os.path.basename(set_extension(path, "amog"))
+        output_name = args.output if len(files) == 1 and args.output else output_name
+
+        output = os.path.join(output_path, output_name)
+
+        if args.decode:
+            print(f"Decoding {path} to {output}")
+            decode_image(path, output, format=args.format, sussyness=args.sus)
+        else:
+            print(f"Encoding {path} to {output}")
+            encode_image(path, output)
+            if not args.encode:
+                print(f"Decoding {output} to {output}.{args.format}")
+                decode_image(
+                    output,
+                    f"{output}.{args.format}",
+                    format=args.format,
+                    sussyness=args.sus,
+                )

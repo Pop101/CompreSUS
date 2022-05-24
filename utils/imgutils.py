@@ -3,20 +3,11 @@ import numpy as np
 # returns the average color of each channel of the image
 # a numpy array of shape img.shape[:-1]
 def avg_color(image):
-    has_alpha = image.shape[-1] == 4
-    weights = image[:, :, 3] if has_alpha else np.ones(image.shape[:-1])
-    if not np.sum(weights):
-        return np.zeros(image.shape[-1])
-
-    avg = np.array(
-        [
-            np.average(image[:, :, channel], weights=weights)
-            for channel in range(image.shape[-1] if not has_alpha else 3)
-        ]
-    )
-    if has_alpha:
-        avg = np.append(avg, 1)
-    return avg
+    image = np.array(image)
+    color_sum = image.reshape(-1, image.shape[-1]).sum(axis=0)
+    if color_sum[-1] != 0:
+        return color_sum / color_sum[-1]
+    return np.zeros(image.shape[-1])
 
 
 # method to get the best color for an amogus

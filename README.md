@@ -75,7 +75,7 @@ Run and Enjoy. Honestly, I don't know why you'd ever want to use this.
 **A:** Feeling kinda sus rn ngl no cap frfr
 
 **Q:** Is this an april fool's joke \
-**A:** Yes, but I didn't wanna wait.
+**A:** If it makes you feel better about this, sure.
 
 
 \
