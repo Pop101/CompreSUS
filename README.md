@@ -16,7 +16,7 @@ Then, try CompreSUS
 Amogus. Amogus. Amogus. The entire picture becomes sus. \
 \
 This project is borne out of a deep love and desire to connect with the unfortunate spacemen featured in the hit title *Among Us*, commonly referred to as *Amogus*.
-While it initially stated as a way to deepen my understanding of various image compression technologies, *(CompreSUS)[https://github.com/Pop101/CompreSUS]* has become so much more.
+While it initially stated as a way to deepen my understanding of various image compression technologies, *[CompreSUS](https://github.com/Pop101/CompreSUS)* has become so much more.
 Staring at code for hours and hours, I have come to realize that the world of code is not as it seems.
 Arrays, to the uninitiated, can seem hard to visualize, but after hours of debugging, `numpy` representation of the *amogus*, a rudimentary outline of the titillating character, takes on a newfound beauty.
 The pattern of the spaceman lies deep within our eyes, a transcendant pattern that cannot, and should not, be denied.
