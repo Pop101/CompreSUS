@@ -1,9 +1,11 @@
 import numpy as np
+from numba import njit, jit
 
 # returns the average color of each channel of the image
 # a numpy array of shape img.shape[:-1]
-def avg_color(image):
-    image = np.array(image)
+@njit
+def avg_color(image: np.array):
+    image = image.copy()
     color_sum = image.reshape(-1, image.shape[-1]).sum(axis=0)
     if color_sum[-1] != 0:
         return color_sum / color_sum[-1]
@@ -12,17 +14,20 @@ def avg_color(image):
 
 # method to get the best color for an amogus
 # returns the average color of each channel of the image
+@njit
 def match_block(block, img):
     filtered = img * block
     return avg_color(filtered)
 
 
 # method to rate a block
+@njit
 def rate_match(color, image):
     return np.sum(np.abs(color - avg_color(image)))
 
 
 # Multiplies each channel in the image by the color
+@njit
 def colorize(image, color: list):
     image = image.copy()
     image[:, :, 0] *= color[0]
@@ -30,22 +35,23 @@ def colorize(image, color: list):
     image[:, :, 2] *= color[2]
     return image
 
-
+@njit
 def match_pattern(pattern, img):
     inverse_pattern = np.ones(pattern.shape) - pattern
 
     pattern_color = match_block(pattern, img)
-    pattern_flip_color = match_block(np.flip(pattern, axis=1), img)
+    pattern_flip_color = match_block(np.fliplr(pattern), img)
 
     # Rate both the pattern and the flipped pattern
     should_flip = rate_match(pattern_flip_color, img) < rate_match(pattern_color, img)
     pattern_color = pattern_flip_color if should_flip else pattern_color
 
     # Perform the same check on the inverse pattern
-    inverse = inverse_pattern if not should_flip else np.flip(inverse_pattern, axis=1)
+    inverse = inverse_pattern if not should_flip else np.fliplr(inverse_pattern)
     inverse_color = match_block(inverse, img)
 
     return (should_flip, pattern_color, inverse_color)
+
 
 
 def pad(img, before: tuple = None, after: tuple = None):

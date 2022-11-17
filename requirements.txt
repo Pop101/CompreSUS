@@ -1,3 +1,4 @@
 deflate>=0.3.0
 Pillow>=8.4.0
 scikit-image>=0.19.2
+numba>=0.54.4

@@ -1,8 +1,9 @@
 from io import BytesIO
 import numpy as np
+from numba import njit
 
-
-def encode_pattern(flip_bit: bool, color: list):
+@njit(fastmath=True)
+def encode_pattern(flip_bit: bool, color: list) -> np.uint32:
     # Convert each color to uint8
     color = [np.uint8(c * 255) for c in color]
 
@@ -10,10 +11,10 @@ def encode_pattern(flip_bit: bool, color: list):
     color[2] &= 0b11111110
     color[2] |= 0b00000001 if flip_bit else 0b00000000
 
-    # Merge all the bytes into a single uint24
-    return np.uint32(color[0] << 16 | color[1] << 8 | color[2]).tobytes()[:-1]
-
-
+    # Merge all the bytes into a single uint32
+    return np.uint32(color[0] << 16 | color[1] << 8 | color[2])
+    
+    
 def decode_pattern(bytestream: BytesIO):
     # Read 3 numbers
     color = np.frombuffer(bytestream.read(3), dtype=np.uint8).copy()

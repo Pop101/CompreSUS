@@ -55,12 +55,14 @@ def encode_image(img_path, out_path):
             # However, it keeps the code cleaner
             flip, color, inverse_color = match_pattern(AMOGI, block)
             pattern = encode_pattern(flip, color)
-            compression.extend(pattern)
+            pattern_bytes = np.uint32(pattern).tobytes()[:-1]
+            compression.extend(pattern_bytes)
 
             # Only encode the background color for the first iteration
             if offset == (0, 0):
                 inverse = encode_pattern(flip, inverse_color)
-                compression.extend(inverse)
+                inverse_bytes = np.uint32(inverse).tobytes()[:-1]
+                compression.extend(inverse_bytes)
 
     with open(out_path, "wb") as f:
         f.write(compress(compression, 10))
