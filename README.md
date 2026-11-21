@@ -1,4 +1,8 @@
-![Banner](.github/banner.amog.png)
+# CompreSUS
+
+An experimental image codec that turns pictures into a grid of tiny Among Us crewmates.
+
+![CompreSUS banner](.github/banner.amog.png)
 
 Is JPEG too normal for you? \
 Do you *still* think amogus is funny? \
@@ -6,7 +10,6 @@ Then, try CompreSUS
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [General Info](#general-info)
 - [Technologies](#technologies)
 - [Inner Workings](#inner-workings)
@@ -29,7 +32,7 @@ Embrace ***amogus***.
 
 ## Technologies
 
-This project is created with:
+Image processing and compression dependencies:
 
 - [Numpy](https://numpy.org/): 1.21.4
 - [scikit-image](https://scikit-image.org/): 0.19.2
@@ -49,10 +52,13 @@ The resulting image is entirely made out of amogi, which is to say, pretty sus.
 ## Setup
 
 Clone the Repo \
-```git clone https://github.com/Pop101/CompreSUS``` \
-Enter the Repo and Install requirements \
-```cd CompreSUS && sudo python3 -m pip install -r requirements``` \
-Run and Enjoy as you see fit.
+```sh
+git clone https://github.com/Pop101/CompreSUS.git
+cd CompreSUS
+python -m pip install -r requirements.txt
+```
+
+The examples above show what the codec produces. Current Python compatibility was not verified.
 
 ## FAQ
 
